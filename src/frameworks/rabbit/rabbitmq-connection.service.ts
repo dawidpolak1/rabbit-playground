@@ -39,4 +39,8 @@ export class RabbitmqConnectionService implements OnModuleInit {
       throw error;
     }
   }
+
+  public getChannel(): Channel {
+    return this.channel;
+  }
 }
