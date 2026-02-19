@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { RabbitmqConnectionService } from '../frameworks/rabbit/rabbitmq-connection.service';
-import { QUEUES } from '../frameworks/rabbit/queues';
+import { RabbitmqConnectionService } from '../../../frameworks/rabbit/rabbitmq-connection.service';
+import { QUEUES } from '../../../frameworks/rabbit/queues';
 
 @Injectable()
 export class ConsumerService implements OnModuleInit {
@@ -13,13 +13,12 @@ export class ConsumerService implements OnModuleInit {
   async onModuleInit() {
     const channel = this.rabbitConnectionService.getChannel();
     await channel.assertQueue(QUEUES.TASK, { durable: true });
-    this.logger.log(
-      ` [*] Waiting for messages in ${QUEUES.TASK}.`,
-    );
+    this.logger.log(` [*] Waiting for messages in ${QUEUES.TASK}.`);
   }
 
   async consume() {
     const channel = this.rabbitConnectionService.getChannel();
+    await channel.prefetch(1);
     await channel.consume(QUEUES.TASK, (msg) => {
       if (!msg) {
         this.logger.warn('Received null message (consumer cancelled)');

@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { RabbitmqConnectionService } from '../frameworks/rabbit/rabbitmq-connection.service';
-import { QUEUES } from '../frameworks/rabbit/queues';
+import { RabbitmqConnectionService } from '../../../frameworks/rabbit/rabbitmq-connection.service';
+import { QUEUES } from '../../../frameworks/rabbit/queues';
 
 @Injectable()
 export class ProducerService implements OnModuleInit {
