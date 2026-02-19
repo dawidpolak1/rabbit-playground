@@ -15,11 +15,11 @@ export class ProducerService implements OnModuleInit {
     await channel.assertQueue(QUEUES.TASK, { durable: true });
   }
 
-  async send(message: object) {
+  send(message: object) {
     const channel = this.rabbitConnectionService.getChannel();
     channel.sendToQueue(QUEUES.TASK, Buffer.from(JSON.stringify(message)), {
       persistent: true,
     });
-    this.logger.log(`Sent to the queue: ${message}`);
+    this.logger.log(`Sent to the queue: ${JSON.stringify(message)}`);
   }
 }

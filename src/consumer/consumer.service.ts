@@ -33,7 +33,7 @@ export class ConsumerService implements OnModuleInit {
 
       setTimeout(() => {
         this.logger.log('[x] Done');
-         channel.ack(msg); // Ack AFTER work completes
+        channel.ack(msg); // Ack AFTER work completes
       }, seconds * 1000);
     });
   }
