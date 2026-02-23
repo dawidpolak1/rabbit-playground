@@ -1,7 +1,7 @@
 import { RabbitmqConnectionService } from '../../frameworks/rabbit/rabbitmq-connection.service';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { EXCHANGES, EXCHANGE_TYPES } from './exchanges';
-import { OrderEvent } from './order-event.types';
+import { EXCHANGES, EXCHANGE_TYPES } from './definitions/exchanges';
+import { OrderEvent } from './order/order-event.types';
 
 @Injectable()
 export class RoutingService implements OnModuleInit {
@@ -44,9 +44,11 @@ export class RoutingService implements OnModuleInit {
   ): Promise<void> {
     const channel = this.rabbitConnectionService.getChannel();
 
-    // Create temporary exclusive queue for this consumer
+    // Create temporary named exclusive queue for this consumer
     const q = await channel.assertQueue(queueName, {
       exclusive: true,
+      durable: false,
+      autoDelete: false,
     });
     this.logger.log(`[${consumerName}] Created queue: ${q.queue}`);
 
