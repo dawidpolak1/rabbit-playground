@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { OrderService } from './order/order.service';
 import { RabbitmqConnectionModule } from '../../frameworks/rabbit/rabbitmq-connection.module';
 import { RoutingService } from './routing.service';
-import { RoutingController } from './routing.controller';
+import { RoutingProducerController } from './routing-producer.controller';
 
 @Module({
   imports: [RabbitmqConnectionModule],
-  controllers: [RoutingController],
+  controllers: [RoutingProducerController],
   providers: [RoutingService, OrderService],
 })
-export class RoutingModule {}
+export class RoutingProducerModule {}
