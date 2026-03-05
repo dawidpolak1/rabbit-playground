@@ -1,6 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { PubSubService } from './pub-sub.service';
 
+@ApiTags('Pub-Sub')
 @Controller('pub-sub')
 export class PubSubController {
   constructor(private readonly pubSubService: PubSubService) {}

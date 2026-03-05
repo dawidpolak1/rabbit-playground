@@ -1,8 +1,16 @@
-import { Inject, Injectable, OnModuleInit, Logger } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  OnModuleInit,
+  OnModuleDestroy,
+  Logger,
+} from '@nestjs/common';
 import { Channel, ChannelModel, connect } from 'amqplib';
 
 @Injectable()
-export class RabbitmqConnectionService implements OnModuleInit {
+export class RabbitmqConnectionService
+  implements OnModuleInit, OnModuleDestroy
+{
   private readonly logger = new Logger(RabbitmqConnectionService.name);
 
   private connection: ChannelModel;
@@ -19,10 +27,9 @@ export class RabbitmqConnectionService implements OnModuleInit {
       this.connection = conn;
 
       this.connection.on('error', (err) => {
-        this.logger.error(
-          `Błąd połączenia RabbitMQ: ${err.message}`,
-          err.stack,
-        );
+        const message = err instanceof Error ? err.message : String(err);
+        const stack = err instanceof Error ? err.stack : undefined;
+        this.logger.error(`Błąd połączenia RabbitMQ: ${message}`, stack);
       });
 
       this.connection.on('close', () => {
@@ -32,11 +39,26 @@ export class RabbitmqConnectionService implements OnModuleInit {
       this.logger.log('Pomyślnie połączono z RabbitMQ i utworzono kanał.');
     } catch (error) {
       if (this.connection) await this.connection.close();
-      this.logger.error(
-        `Nie udało się połączyć z RabbitMQ: ${error.message}`,
-        error.stack,
-      );
+      const message = error instanceof Error ? error.message : String(error);
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Nie udało się połączyć z RabbitMQ: ${message}`, stack);
       throw error;
+    }
+  }
+
+  async onModuleDestroy() {
+    try {
+      if (this.channel) {
+        await this.channel.close();
+        this.logger.log('RabbitMQ channel closed.');
+      }
+      if (this.connection) {
+        await this.connection.close();
+        this.logger.log('RabbitMQ connection closed.');
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      this.logger.error('Error closing RabbitMQ connection:', message);
     }
   }
 

@@ -10,10 +10,11 @@ import {
   CancelOrderResponse,
   CreateOrderResponse,
   PaidOrderResponse,
+  ShippedOrderResponse,
 } from './order/response/order.response';
 import { PaymentDto } from './order/dto/payment.dto';
 
-@ApiTags('routing/producer')
+@ApiTags('Routing - Producer')
 @Controller('routing/producer')
 export class RoutingProducerController {
   constructor(private orderService: OrderService) {}
@@ -86,7 +87,9 @@ export class RoutingProducerController {
     status: 201,
     description: 'Order successfully marked as shipped',
   })
-  async markAsShipped(@Body() body: OrderShippedDto) {
+  async markAsShipped(
+    @Body() body: OrderShippedDto,
+  ): Promise<ShippedOrderResponse> {
     await this.orderService.markAsShipped(body);
 
     const orderId = body.orderId;

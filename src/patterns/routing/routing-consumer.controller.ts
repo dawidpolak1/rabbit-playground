@@ -3,9 +3,9 @@ import { Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ShippingServiceConsumer } from './consumers/shipping-service.consumer';
 import { EmailServiceConsumer } from './consumers/email-service.consumer';
-import { ConsumerStartedResponse } from './consumers/consumer-started.response';
+import { ConsumerStartedResponse } from './response/consumer-started.response';
 
-@ApiTags('routing/consumer')
+@ApiTags('Routing - Consumer')
 @Controller('routing/consumer')
 export class RoutingConsumerController {
   constructor(

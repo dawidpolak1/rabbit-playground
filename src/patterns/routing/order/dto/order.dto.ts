@@ -63,8 +63,8 @@ export class OrderShippedDto {
 
   @ApiProperty({
     description: 'Shipping carrier',
-    enum: ['dhl', 'fedex'],
+    enum: ['dhl', 'fedex', 'ups'],
     example: 'dhl',
   })
-  carrier: 'dhl' | 'fedex';
+  carrier: 'dhl' | 'fedex' | 'ups';
 }
